@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "launch-program",
+            // "program": "${workspaceFolder}/dist/index.js",
+            "program": "${workspaceFolder}/src/index.ts", // There is no Bash terminal path interpretation conflict here because VS Code is not generating and running a command in the background in bash terminal to launch the program. It is using the Node.js runtime to directly execute the specified file, and Node.js can handle both Windows-style and Unix-style paths without any issues.
+            "preLaunchTask": "tsc: build - tsconfig.json", // This is just a convienient way to automate the compilation or build process before launching the program. Can be done manully by executing the 'tsc' command or running the build task tsc: build - tsconfig.json via ctrl+shift+b or command palette or Terminal -> Run Build Task or Run Task.
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        }
+    ]
+}
+
+//Note:
+// One key observation is that, regardless of whether the "program" points to src/index.ts
+// or dist/index.js as an entry point, breakpoints can be set and hit in both files. This is possible
+// because source maps are enabled, allowing the debugger to seamlessly map the compiled
+// JavaScript back to the original TypeScript source.
+// If launch-program button in the debug panel is not working, try using the button in the status bar or use F5 to start debugging.

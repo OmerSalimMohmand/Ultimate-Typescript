@@ -1,0 +1,56 @@
+// First and foremost, tasks.json file is used to define custom tasks that can be run from the
+// VS Code command palette or integrated into the build process. In this case, we are defining a
+// task to compile TypeScript files using the TypeScript compiler (tsc) based on the configuration
+// specified in tsconfig.json.
+
+// A virtual task is created while running the task in build.json, which internally constructs the
+// command like `tsc -p c:\Users\...\tsconfig.json` and cmd handles backslashes correctly.
+// However, if the default terminal is set to Bash, it treats backslashes as escape characters,
+// leading to a failure when running the task.
+// To fix this issue, you can either change the default terminal to Command Prompt (cmd) in VS Code
+// settings or explicitly define and modify the task to use "shell" type instead of "typescript"
+// and specify the command to run tsc directly, ensuring that the path is correctly formatted for
+// the terminal being used.
+
+// The following task fails if the default terminal is set to Bash because VS code internally
+// constructs a command like "tsc -p <path>" and as it is on Windows environment, it generates
+// Windows-style path (c:\...) which colides with the way bash requires paths to be formatted
+// (with forward slashes or escaped backslashed).
+
+// {
+//   "version": "2.0.0",
+//   "tasks": [
+//     {
+//       "label": "tsc: build - tsconfig.json",
+//       "type": "typescript",
+//       "tsconfig": "tsconfig.json",
+//       "problemMatcher": ["$tsc"],
+//       "group": {
+//         "kind": "build",
+//         "isDefault": true
+//       },
+//     }
+//   ]
+// }
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tsc: build - tsconfig.json",
+      "type": "shell",
+      "command": "tsc",
+      // tsc automatically detects tsconfig.json in the current directory, so you can just run `tsc`
+      // without any arguments. However, if you want to specify the tsconfig file explicitly, you can
+      // use args as shown below. Make sure to use the correct path format for your terminal
+      // (e.g., forward slashes for Bash, backslashes for cmd).
+      "args": ["-p", "tsconfig.json"], // VS Code runs the task inside your workspace folder already, so you can just specify the tsconfig file name without the full path. Works in both cmd and Bash.
+      // "args": ["-p", "'${workspaceFolder}/tsconfig.json'"], // Explicit quoting — very reliable — prevents Bash from touching the path.
+      "problemMatcher": "$tsc",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}

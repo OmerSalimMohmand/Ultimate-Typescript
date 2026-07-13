@@ -20,6 +20,7 @@
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "removeComments": true, // to reduce the size of the output files, and to prevent accidentally exposing comments that might contain sensitive information.
 
     // Style Options
     // "noImplicitReturns": true,
@@ -37,5 +38,6 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    // "noImplicitAny": false // for better editor experience when using data like documents without types
   }
 }

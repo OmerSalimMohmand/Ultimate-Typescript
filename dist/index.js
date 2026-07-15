@@ -5,6 +5,6 @@ console.log('Welcome to the world of TypeScript!');
 let age = 25;
 let name = 'John Doe';
 if (age > 18) {
-    console.log(`${name} is an adult.`);
+    console.log(`${name} is an adult..`);
 }
 //# sourceMappingURL=index.js.map

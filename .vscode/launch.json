@@ -8,7 +8,7 @@
             "name": "launch-program",
             // "program": "${workspaceFolder}/dist/index.js",
             "program": "${workspaceFolder}/src/index.ts", // There is no Bash terminal path interpretation conflict here because VS Code is not generating and running a command in the background in bash terminal to launch the program. It is using the Node.js runtime to directly execute the specified file, and Node.js can handle both Windows-style and Unix-style paths without any issues.
-            "preLaunchTask": "tsc: build - tsconfig.json", // This is just a convienient way to automate the compilation or build process before launching the program. Can be done manully by executing the 'tsc' command or running the build task tsc: build - tsconfig.json via ctrl+shift+b or command palette or Terminal -> Run Build Task or Run Task.
+            "preLaunchTask": "tsc: build - tsconfig.json", // This is just a convienient way to automate the compilation or build process before launching the program. Can be done manully by executing the 'tsc' command or running the build task tsc: build - tsconfig.json via ctrl+shift+b or command palette (tasks: Run Task) or Terminal -> Run Build Task or Run Task.
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],

@@ -5,5 +5,5 @@ let age: number = 25;
 let name: string = 'John Doe';
 
 if (age > 18) {
-    console.log(`${name} is an adult.`);
+    console.log(`${name} is an adult..`);
 }

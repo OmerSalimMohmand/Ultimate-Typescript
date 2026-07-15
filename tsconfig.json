@@ -29,6 +29,7 @@
     // "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
+    "noEmitOnError": true,
 
     // Recommended Options
     "strict": true,

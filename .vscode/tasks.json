@@ -3,19 +3,21 @@
 // task to compile TypeScript files using the TypeScript compiler (tsc) based on the configuration
 // specified in tsconfig.json.
 
-// A virtual task is created while running the task in build.json, which internally constructs the
-// command like `tsc -p c:\Users\...\tsconfig.json` and cmd handles backslashes correctly.
+// If not explicitly defined, a virtual task is created while running the task in launch.json via the "preLaunchTask" property,
+// which internally constructs the command like `tsc -p c:\Users\...\tsconfig.json` and cmd handles backslashes correctly.
+
 // However, if the default terminal is set to Bash, it treats backslashes as escape characters,
 // leading to a failure when running the task.
+
 // To fix this issue, you can either change the default terminal to Command Prompt (cmd) in VS Code
 // settings or explicitly define and modify the task to use "shell" type instead of "typescript"
-// and specify the command to run tsc directly, ensuring that the path is correctly formatted for
+// and specify the command to run tsc dirctly, ensuring that the path is correctly formatted for
 // the terminal being used.
 
 // The following task fails if the default terminal is set to Bash because VS code internally
 // constructs a command like "tsc -p <path>" and as it is on Windows environment, it generates
 // Windows-style path (c:\...) which colides with the way bash requires paths to be formatted
-// (with forward slashes or escaped backslashed).
+// (with forward slashes or escaped backslashes).
 
 // {
 //   "version": "2.0.0",

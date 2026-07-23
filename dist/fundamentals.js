@@ -33,4 +33,20 @@ var Grade;
 ;
 const myGrade = Grade.B;
 console.log(myGrade);
+function calculateTax(income, taxYear = 2020) {
+    if (taxYear > 2020)
+        return income * 0.25;
+    return income * 0.2;
+}
+console.log(calculateTax(100000, 2021));
+console.log(calculateTax(40000));
+let employee = {
+    id: 1,
+    name: 'John',
+    retire: (date) => {
+        console.log(date);
+    }
+};
+console.log(employee);
+employee.retire(new Date());
 //# sourceMappingURL=fundamentals.js.map

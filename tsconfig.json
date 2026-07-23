@@ -24,13 +24,13 @@
 
     // Style Options
     "noImplicitReturns": true, // to catch functions that don't return a value in all code paths.
-    // "noImplicitOverride": true,
+    "noImplicitOverride": true, // // Set to true if you want to catch missing override modifiers.
     "noUnusedLocals": true, // to catch variables that are declared but not used anywhere in the code.
     "noUnusedParameters": true, // to catch function parameters that are declared but not used anywhere in the code.
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
     // "strictNullChecks": false, // to catch null and undefined values in the code.
-    "noEmitOnError": true,
+    "noEmitOnError": false,
     "allowUnreachableCode": false,
 
     // Recommended Options
@@ -41,7 +41,7 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "noImplicitAny": true,  // Set to true if you want to catch implicit any types. Default is true in strict mode.
-                            // setting this to false can improve editor experience when working with data like documents without types, but it may lead to less type safety.
+    "noImplicitAny": true // Set to true if you want to catch implicit any types. Default is true in strict mode.
+    // setting this to false can improve editor experience when working with data like documents without types, but it may lead to less type safety.
   }
 }

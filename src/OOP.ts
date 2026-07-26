@@ -181,11 +181,15 @@ function printFullNames(people: Person[]) {
 // Real-World Backend Polymorphism Example: Payment Processing System
 abstract class Payment{
   abstract processPayment(): void;
+  protected logPaymentDetails() {
+    console.log("Logging payment details...");
+  }
 }
 
 class PayPalPayment extends Payment {
   override processPayment() {
     console.log("Processing PayPal payment.");
+    this.logPaymentDetails(); // We can call the protected method from the superclass.
   }
 }
 
@@ -210,3 +214,90 @@ function checkout(payment: Payment) {
 checkout(new PayPalPayment());
 checkout(new CreditCardPayment());
 checkout(new StripePayment());
+
+// Abstract Classes and Methods:
+
+abstract class Shape { // abstract class cannot be instantiated directly, meaning you cannot create a shape unless we know what kind of shape it is. Shape class is only meant to be a base class for other shapes.
+  constructor(public color: string) {}
+  abstract render(): void; // rendering a shape really depends on the type of shape, so we leave this method abstract
+}
+
+class Circle extends Shape {
+  constructor(
+    color: string,
+    public radius: number,
+  ) {
+    super(color);
+  }
+
+  render(): void {
+    console.log(`Rendering a ${this.color} circle with radius ${this.radius}`);
+    }
+    
+    getRadius(): number {
+        return this.radius;
+    }
+}
+
+let shape: Shape = new Circle('red', 5); // we can create a Circle object and assign it to a variable of type Shape
+shape.render(); // Rendering a red circle with radius 5
+// shape.getRadius(); // Error: Property 'getRadius' does not exist on type 'Shape'.
+(shape as Circle).getRadius(); // Casting the shape variable to Circle type to access the getRadius method.
+(<Circle>shape).getRadius(); // Using type assertion to access the getRadius method.
+
+
+// Interfaces:
+// Interfaces are used to define the structure of an object.
+// They can be implemented by classes to ensure that the class adheres to a specific contract.
+
+// Which is better to use, abstract classes or interfaces? It depends on the use case.
+// If we want to define a contract that multiple classes can implement, use an interface.
+// If we want to provide some shared logic, functionality and enforce a certain structure, use an abstract class.
+
+interface Calender {
+  name: string;
+  addEvent(event: string): void;
+  removeEvent(event: string): void;
+}
+
+interface CloudCalender extends Calender {
+  sync(): void;
+}
+
+class GoogleCalender implements Calender {
+  constructor(public name: string) {}
+
+  addEvent(event: string): void {
+    throw new Error("Method not implemented.");
+  }
+  removeEvent(event: string): void {
+    throw new Error("Method not implemented.");
+  }
+}
+
+// Shape interface example:
+
+interface IShape {
+  color: string;
+  render(): void;
+}
+
+interface I3DShape extends IShape {
+  volume(): number;
+}
+
+class Cube implements I3DShape {
+  constructor(public color: string) {
+    this.color = color;
+  }
+
+  volume(): number {
+    throw new Error("Method not implemented.");
+  }
+  render(): void {
+    throw new Error("Method not implemented.");
+  }
+}
+
+let cube = new Cube("red");
+console.log(cube);

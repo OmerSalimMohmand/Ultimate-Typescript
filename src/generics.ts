@@ -1,13 +1,16 @@
 // Generic classes:
 
-class KeyValuePair<K, V>{
-  constructor(public key: K, public value: V){}
+class KeyValuePair<K, V> {
+  constructor(
+    public key: K,
+    public value: V,
+  ) {}
 }
 
-let pair = new KeyValuePair<number, string>(1, 'a');
+let pair = new KeyValuePair<number, string>(1, "a");
 pair.value.toUpperCase(); // Intellisense pops up all number methods for key and string methods for value here.
 
-let pair2 = new KeyValuePair('isActive', true); // Compiler infers the types of key and value as string and boolean respectively.
+let pair2 = new KeyValuePair("isActive", true); // Compiler infers the types of key and value as string and boolean respectively.
 
 // Generic functions:
 
@@ -17,14 +20,13 @@ function wrapInArray<T>(value: T) {
 
 let numbers = wrapInArray(1);
 //OR
-class ArrayUtils{
+class ArrayUtils {
   static wrapInArray<T>(value: T) {
     return [value];
   }
 }
 
 let numbers = ArrayUtils.wrapInArray(1);
-
 
 // Generic Interfaces:
 
@@ -38,12 +40,27 @@ interface Result<T> {
   error: string | null;
 }
 
-function fetch<T>(): Result<T> { // We use fetch<T> because this function returns a generic result of type T.
-  return { data: null, error: null };
+// function fetch<T>(): Result<T> { // We use fetch<T> because this function returns a generic result of type T.
+//   return { data: null, error: null };
+// }
+
+// A more understandable version:
+
+function fetch<T>(url: string): Result<T> {
+  const response: T | null = null; // Simulating a fetch operation
+  return { data: response, error: null };
 }
 
-// function fetch<T>(requestData: T): Result<T> {
-//   return { data: requestData, error: null };
+// To see how it really works for further understanding, see the following version:
+
+// async function fetch<T>(url: string): Promise<Result<T>> {
+//   try {
+//     const response = await fetch(url);
+//     const data: T = await response.json();
+//     return { data, error: null };
+//   } catch (error) {
+//     return { data: null, error: (error as Error).message };
+//   }
 // }
 
 interface User {
@@ -54,15 +71,15 @@ interface Product {
   title: string;
 }
 
-let user = fetch<User>();
+let user = fetch<User>("http://example.com/api/user");
 user.data?.username;
 
-// let product = fetch<Product>({ title: "Computer" });
-// product.data?.title;
+let product = fetch<Product>("http://example.com/api/product");
+product.data?.title;
 
 // ApiResponse example:
 
-interface ApiResponse<T>{
+interface ApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
@@ -78,11 +95,11 @@ const userResponse: ApiResponse<User> = {
   message: "User fetched successfully",
   data: {
     id: 1,
-    name: "Omer"
-  }
+    name: "Omer",
+  },
 };
 
-interface Product{
+interface Product {
   id: number;
   title: string;
   price: number;
@@ -94,8 +111,8 @@ const productResponse: ApiResponse<Product> = {
   data: {
     id: 1,
     title: "Laptop",
-    price: 1000
-  }
+    price: 1000,
+  },
 };
 
 // For multiple products:
@@ -106,12 +123,12 @@ const productsResponse: ApiResponse<Product[]> = {
     {
       id: 1,
       title: "Laptop",
-      price: 1000
+      price: 1000,
     },
     {
       id: 2,
       title: "Phone",
-      price: 500
-    }
-  ]
+      price: 500,
+    },
+  ],
 };

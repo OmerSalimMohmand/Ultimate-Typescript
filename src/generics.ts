@@ -132,3 +132,160 @@ const productsResponse: ApiResponse<Product[]> = {
     },
   ],
 };
+
+// Generic constraints:
+
+function echo<T extends number | string>(value: T): T {
+  return value;
+}
+
+function log<T extends { name: "Omer" }>(value: T) {
+  console.log(value);
+}
+
+echo("abc");
+echo(123);
+log({ name: "Omer" });
+
+interface Person {
+  name: string;
+}
+
+interface Employee extends Person {
+  salary: number;
+}
+
+function echo<T extends Person>(value: T): T {
+  return value;
+}
+
+echo({ name: "Omer" });
+echo({ name: "Omer", salary: 1000 }); // valid as it has the shape of Employee interface which has been derived from the Person interface.
+echo({ name: "Omer", salary: 1000, age: 123 }); // Even though this object has an extra property 'age', it is still valid because TypeScript uses structural typing. The object still satisfies the shape of the Person interface, so it can be passed to the echo function.
+
+// Similarly with classes:
+
+class Person {
+  constructor(public name: string) {}
+}
+
+class Employee extends Person {
+  constructor(
+    name: string,
+    public salary: number,
+  ) {
+    super(name);
+  }
+}
+
+function echo<T extends Person>(value: T): T {
+  return value;
+}
+
+echo(new Person("Omer"));
+echo(new Employee("Omer", 1000));
+echo({ name: "Omer", salary: 1000, age: 123 });
+
+// Generic Inheritance:
+// Think of it like inheritance in real life.
+// Generic inheritance promotes:
+// - Reusability
+// - Type safety
+// - Cleaner design
+// - Less duplicated code
+
+//Example 1: In this example we inherit the specialized UserRepository which fixes the generic type T to User.
+// This allows us to create a repository specifically for User objects, while still leveraging the generic functionality provided by the base Repository class.
+
+class Repository<T>{
+    save(item: T): void {
+        console.log('Saving item:', item);
+    }
+}
+
+interface User{
+    id: number;
+    name: string;
+}
+
+interface Product{
+    id: number;
+    title: string;
+}
+
+class UserRepository extends Repository<User>{
+    findById(id: number): User | null {
+        // Simulate finding a user by ID
+        return { id, name: 'John Doe' };
+    }
+}
+
+let userRepo = new UserRepository();
+userRepo.save({ id: 1, name: 'Alice' });
+userRepo.findById(1);
+
+//Example 2: Sometimes we don't want to fix the generic type in the subclass and keeps it generic so it works with different types.
+
+class PaginatedRepository<T> extends Repository<T>{
+    getPage(pageNumber: number): T[] {
+        // Simulate fetching a page of items
+        return [];
+    }
+}
+
+const userPagedRepo = new PaginatedRepository<User>();
+userPagedRepo.save({ id: 2, name: 'Bob' });
+userPagedRepo.getPage(1);
+
+const productPagedRepo = new PaginatedRepository<Product>();
+productPagedRepo.save({ id: 1, title: 'Product 1' });
+productPagedRepo.getPage(1);
+
+// We can also constrain generics when extending them:
+interface Entity {
+    id: number;
+}
+class Repository<T extends Entity> {... }
+
+// Example 3: In this example, our type T needs to be constrained to the Entity interface so that we can access the id property in the findById method without any errors.
+
+// Example 3: In this example, our type T needs to be constrained to the Entity interface so that we can access the id property in the findById method without any errors.
+
+interface Entity {
+  id: number;
+  name: string;
+}
+
+class Repository<T extends Entity> {
+  protected objects: T[] = [];
+
+  save(item: T): void {
+    this.objects.push(item);
+    console.log("Saving item:", item);
+  }
+
+  findById(id: number): T | undefined {
+    // Simulate finding an item by name
+    return this.objects.find((item) => item.id === id); // item.id gives an error because T is a generic type and we don't know if it has an id property. To fix this, we can constrain T to extend the Entity interface.
+  }
+}
+
+// Similarly:
+class SearchableRepository<T extends Entity> extends Repository<T> {
+  findByName(name: string): T | undefined {
+    // Simulate finding an item by name
+    return this.objects.find((item) => item.name === name); // item.name works if we constrain T to extend the Entity interface. 
+  }
+}
+
+// Golden Rule:
+
+// Whenever you see:
+// class Something<T> extends SomethingElse<T>
+// read it in English as:
+// "I am inheriting all the behavior of the parent class and I want to keep it generic."
+
+// And whenever you see:
+// class Something extends SomethingElse<User>
+// read it as:
+// "I am inheriting all the behavior of the parent class, but I am specializing it for the User type."

@@ -7,3 +7,4 @@ let name: string = 'John Doe';
 if (age > 18) {
     console.log(`${name} is an adult..`);
 }
+

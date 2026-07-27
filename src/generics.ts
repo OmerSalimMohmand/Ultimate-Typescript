@@ -289,3 +289,35 @@ class SearchableRepository<T extends Entity> extends Repository<T> {
 // class Something extends SomethingElse<User>
 // read it as:
 // "I am inheriting all the behavior of the parent class, but I am specializing it for the User type."
+
+
+// keyof Operator:
+// keyof is a TypeScript operator that takes an object type and produces a string or numeric literal union of its keys.
+// It is often used in generic programming to create functions or classes that can work with the properties of an object in a type-safe manner.
+interface Entity {
+  id: number;
+  name: string;
+}
+
+interface Product extends Entity {
+  price: number;
+}
+
+class Repository<T extends Entity> {
+  protected objects: T[] = [];
+
+  save(item: T): void {
+    this.objects.push(item);
+    console.log("Saving item:", item);
+  }
+
+  find(property: keyof T, value: unknown): T | undefined { // Remember that keyof T is a TypeScript-only construct that lives only at compile-time and erased at runtime. So we cannot use it to access or log the property of an object at runtime.
+    return this.objects.find(obj => obj[property] === value);
+  }
+}
+
+const productRepository = new Repository<Product>();
+productRepository.save({ id: 1, name: "Laptop", price: 999.99 });
+productRepository.find("name", "Laptop");
+productRepository.find("price", 999.99);
+productRepository.find("title", 1); // Error: title is not a key of Product

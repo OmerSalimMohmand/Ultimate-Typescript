@@ -249,8 +249,6 @@ class Repository<T extends Entity> {... }
 
 // Example 3: In this example, our type T needs to be constrained to the Entity interface so that we can access the id property in the findById method without any errors.
 
-// Example 3: In this example, our type T needs to be constrained to the Entity interface so that we can access the id property in the findById method without any errors.
-
 interface Entity {
   id: number;
   name: string;
@@ -321,3 +319,128 @@ productRepository.save({ id: 1, name: "Laptop", price: 999.99 });
 productRepository.find("name", "Laptop");
 productRepository.find("price", 999.99);
 productRepository.find("title", 1); // Error: title is not a key of Product
+
+//Type Mapping:
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+type ReadOnly<T> = {
+  readonly [K in keyof T]: T[K];
+};
+
+type Optional<T> = {
+  [K in keyof T]?: T[K];
+};
+
+type Nullable<T> = {
+  [K in keyof T]: T[K] | null;
+};
+
+const user: Nullable<User> = {
+  id: null,
+  name: "Omer",
+  email: "omer@gmail.com",
+  password: "123",
+};
+
+const product: Optional<Product> = {
+  name: "Potato",
+};
+
+// Utility Types:
+
+let users: Partial<User> = {
+  id: 1,
+  name: "Omer",
+};
+
+let users: Readonly<User> = {
+  id: 1,
+  name: "Omer",
+  email: "omer@gmail.com",
+  password: "123"
+}
+
+let users: Omit<User, "password"> = {
+  id: 1,
+  name: "Omer",
+  email: "omer@gmail.com",
+};
+
+let users: Required<User> = {
+  id: 1,
+  name: "Omer",
+  email: "omersalim@gmail.com", // email is optional in original User type
+  password: "123",
+};
+
+let users: Pick<User, "id" | "name"> = {
+  id: 1,
+  name: "Omer",
+};
+
+function getUser() {
+  return {
+    id: 1,
+    name: "Omer",
+    email: "omersalim@gmail.com",
+    password: "123",
+  };
+}
+
+type User = ReturnType<typeof getUser>; // TypeScript's typeof operator extracts the function signature type of getUser at compile time (e.g., () => { id: number; name: string }).
+let user: User = {
+  id: 2,
+  name: "Omer Salim",
+  email: "omer@gmail.com",
+  password: "123",
+};
+
+type Role = "admin" | "user" | "guest";
+type LoggedInRole = Exclude<Role, "guest">;
+let userRole: LoggedInRole = "admin";
+
+// Record<K, T>
+// Creates an object whose keys all have the same value type.
+type Score = Record<string, number>;
+//Equivalent to index signature: { [key: string]: number; }
+
+let scores: Score = {
+  math: 94,
+  Physics: 85
+}
+
+// TS typeof Operator:
+
+//In TypeScript, typeof can be used in a type annotation context (Type Space). It never executes at runtime and produces zero JavaScript code when compiled.
+//Instead of returning a string, it extracts the TypeScript type of a JavaScript variable, function, or object so you can reuse it elsewhere.
+  // When it runs: Compile-time only (stripped away during compilation).
+  // What it takes: A JavaScript variable/value name.
+  // What it returns: A TypeScript type.
+
+const defaultUser = {
+  id: 1,
+  name: "Alex",
+  roles: ["admin", "user"]
+};
+
+// TS typeof extracts the shape/type of defaultUser:
+// { id: number; name: string; roles: string[] }
+type User = typeof defaultUser;
+
+const newUser: User = {
+  id: 2,
+  name: "Sam",
+  roles: ["user"]
+};

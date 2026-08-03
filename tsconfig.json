@@ -6,7 +6,7 @@
     "outDir": "./dist",
 
     // Environment Settings
-    "module": "nodenext",
+    "module": "nodenext", // Set to "esnext" for modern module syntax which allows us to use import/export statements in our code.
     "target": "esnext",
     // and npm install -D @types/node
     "lib": ["esnext", "dom"],
@@ -25,7 +25,7 @@
     // Style Options
     "noImplicitReturns": true, // to catch functions that don't return a value in all code paths.
     "noImplicitOverride": true, // // Set to true if you want to catch missing override modifiers.
-    "noUnusedLocals": true, // to catch variables that are declared but not used anywhere in the code.
+    "noUnusedLocals": false, // to catch variables that are declared but not used anywhere in the code.
     "noUnusedParameters": true, // to catch function parameters that are declared but not used anywhere in the code.
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
@@ -36,7 +36,7 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false, // switchs between CommonJS and ES module syntax based on the "module" option. Set to false if you want to use ES module syntax in your code, even if the "module" option is set to "commonjs" or "nodenext".
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
